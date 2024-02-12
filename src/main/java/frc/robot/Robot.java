@@ -82,8 +82,9 @@ public class Robot extends TimedRobot {
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
   }
+    //
     timer1.reset();
-    
+
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
