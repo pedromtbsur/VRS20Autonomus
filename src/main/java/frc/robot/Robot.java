@@ -8,6 +8,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+// your added imports are below
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -20,6 +24,14 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  private final PWMSparkMax leftRear =  new PWMSparkMax(1);
+  private final PWMSparkMax leftFront = new PWMSparkMax(2);
+  private final PWMSparkMax rightRear = new PWMSparkMax(3);
+  private final PWMSparkMax rightFront = new PWMSparkMax(4);
+
+  private final PWMSparkMax feedWheel = new PWMSparkMax(5);
+  provate final PWMSparkMax launchWheel = new PWMSparkMax(6);
+    
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -29,6 +41,10 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
+    leftFront.setInverted(true);
+    leftRear.setInverted(true);
+
   }
 
   /**
@@ -68,6 +84,11 @@ public class Robot extends TimedRobot {
       case kDefaultAuto:
       default:
         // Put default auto code here
+        leftFront.set(.3);
+        leftRear.set(.3);
+        rightFront.set(.3);
+        rightRear.set(.3);
+
         break;
     }
   }
