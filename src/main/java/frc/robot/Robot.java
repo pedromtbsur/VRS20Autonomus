@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 // your added imports are below
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
-
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -30,8 +32,13 @@ public class Robot extends TimedRobot {
   private final PWMSparkMax rightFront = new PWMSparkMax(4);
 
   private final PWMSparkMax feedWheel = new PWMSparkMax(5);
-  provate final PWMSparkMax launchWheel = new PWMSparkMax(6);
+  private final PWMSparkMax launchWheel = new PWMSparkMax(6);
+
+  private final MotorControllerGroup leftMotors = new MotorControllerGroup(leftFront, leftRear);
+  private final MotorControllerGroup rightMotors = new MotorControllerGroup(rightFront, rightRear);
+  private final DifferentialDrive myDrive = new DifferentialDrive(leftMotors, rightMotors);
     
+  private final Timer timer1 = new Timer();
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -42,8 +49,10 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    leftFront.setInverted(true);
-    leftRear.setInverted(true);
+    leftMotors.setInverted(true);
+    rightMotors.setInverted(false);
+
+    timer1.start();
 
   }
 
@@ -73,7 +82,8 @@ public class Robot extends TimedRobot {
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
   }
-
+    timer1.reset();
+    
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
@@ -84,10 +94,7 @@ public class Robot extends TimedRobot {
       case kDefaultAuto:
       default:
         // Put default auto code here
-        leftFront.set(.3);
-        leftRear.set(.3);
-        rightFront.set(.3);
-        rightRear.set(.3);
+        myDrive.tankDrive(.3, .3 );
 
         break;
     }
