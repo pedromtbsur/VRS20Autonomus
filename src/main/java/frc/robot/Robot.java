@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj.Timer;
  * project.
  */
 public class Robot extends TimedRobot {
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
+  private static final String kDefaultAuto = "Default"; // gop across line only
+  private static final String kSpeakerMiddle = "Speaker Middle and Backup";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -95,8 +95,12 @@ public class Robot extends TimedRobot {
       case kDefaultAuto:
       default:
         // Put default auto code here
-        myDrive.tankDrive(.3, .3 );
-
+        if(timer1.get() < 1.5){
+          myDrive.tankDrive(-.5, -.5 );
+        }
+        else{
+          myDrive.tankDrive(0,0);
+        }
         break;
     }
   }
