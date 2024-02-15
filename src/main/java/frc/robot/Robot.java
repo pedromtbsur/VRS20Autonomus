@@ -38,6 +38,9 @@ public class Robot extends TimedRobot {
   private final MotorControllerGroup rightMotors = new MotorControllerGroup(rightFront, rightRear);
   private final DifferentialDrive myDrive = new DifferentialDrive(leftMotors, rightMotors);
     
+  private final PWMSparkMax feedWheel = new PWMSparkMax(5);
+  private final PWMSparkMax launchWheel = new PWMSparkMax(6);
+
   private final Timer timer1 = new Timer();
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -46,11 +49,14 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
+    m_chooser.addOption("Speaker Middle and Backup", kSpeakerMiddle);
     SmartDashboard.putData("Auto choices", m_chooser);
 
     leftMotors.setInverted(true);
     rightMotors.setInverted(false);
+
+    launchWheel.setInverted(true);
+    feedWheel.setInverted(true);
 
     timer1.start();
 
@@ -89,11 +95,31 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
+      case kSpeakerMiddle: // start middle speaker launch then backup
+        if (timer1.get() < 3){
+          launchWheel.set(1);
+
+        }
+
+        else if(timer1.get() < 5){ // turn on feed wheel to launch the note 
+          launchWheel.set(1);
+          feedWheel.set(1);
+        }
+
+        else if(timer1.get() > 6.5){ // backup over line for leave points
+          launchWheel.set(0);
+          feeddWheel.set(0);
+          myDrive.tankDrive (-.5, -.5);
+        }
+
+        else{ // done turn off all motors
+          launchWheel.set(0);
+          feeddWheel.set(0);
+          myDrive.tankDrive (0, 0);
+        }
         break;
       case kDefaultAuto:
-      default:
+      default:    //just cross the line backwards for points
         // Put default auto code here
         if(timer1.get() < 1.5){
           myDrive.tankDrive(-.5, -.5 );
