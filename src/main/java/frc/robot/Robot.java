@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default"; // gop across line only
   private static final String kSpeakerMiddle = "Speaker Middle and Backup";
+  private static final String kRedLongAuto = "Red Long Speaker add Backup";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -50,6 +51,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("Speaker Middle and Backup", kSpeakerMiddle);
+    m_chooser.addOption("Red Long Speaker and Backup", kRedLongAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
     leftMotors.setInverted(true);
@@ -95,6 +97,46 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     switch (m_autoSelected) {
+      case kRedLongAuto:
+        if (timer1.get() < 3){
+          launchWheel.set(1);
+
+      }
+
+      else if(timer1.get() < 5){ // turn on feed wheel to launch the note 
+        launchWheel.set(1);
+        feedWheel.set(1);
+      }
+
+      else if(timer1.get() < 6.5){ // backup over line for leave points
+        launchWheel.set(0);
+        feeddWheel.set(0);
+        myDrive.tankDrive (-.5, -.5);
+      }
+      else if  (timer1.get() < 7.5){
+        myDrive.tankDrive(.4, -.4)
+      }
+      else if (timer1.get() < 9.5){
+        launchWheel.set(0);
+        feeddWheel.set(0);
+        myDrive.tankDrive (-.5, -.5);
+      }
+      else{ // done turn off all motors
+        launchWheel.set(0);
+        feeddWheel.set(0);
+        myDrive.tankDrive (0, 0);
+      }
+      break;
+    case kDefaultAuto:
+    default:    //just cross the line backwards for points
+      // Put default auto code here
+      if(timer1.get() < 1.5){
+        myDrive.tankDrive(-.5, -.5 );
+      }
+      else{
+        myDrive.tankDrive(0,0);
+      }
+
       case kSpeakerMiddle: // start middle speaker launch then backup
         if (timer1.get() < 3){
           launchWheel.set(1);
@@ -106,7 +148,7 @@ public class Robot extends TimedRobot {
           feedWheel.set(1);
         }
 
-        else if(timer1.get() > 6.5){ // backup over line for leave points
+        else if(timer1.get() < 6.5){ // backup over line for leave points
           launchWheel.set(0);
           feeddWheel.set(0);
           myDrive.tankDrive (-.5, -.5);
