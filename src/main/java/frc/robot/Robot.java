@@ -45,7 +45,9 @@ public class Robot extends TimedRobot {
 
   private final Timer timer1 = new Timer();
 
-  private final  XboxController driverController = new XboxController();
+  private final  XboxController driverController = new XboxController(0);
+  private final  XboxController operatorController = new XboxController(1);
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -182,7 +184,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    myDrive.tankDrive(-driverController.getLeftY, -driverController.getRightY)
+  }
 
   /** This function is called once when the robot is disabled. */
   @Override
