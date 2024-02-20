@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -43,6 +44,8 @@ public class Robot extends TimedRobot {
   private final PWMSparkMax launchWheel = new PWMSparkMax(6);
 
   private final Timer timer1 = new Timer();
+
+  private final  XboxController driverController = new XboxController();
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
